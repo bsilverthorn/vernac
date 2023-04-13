@@ -23,6 +23,7 @@ repository = "https://github.com/bsilverthorn/vernac"
 dev = [
     "ipython",
     "pip-tools",
+    "build",
     "twine",
 ]
 
