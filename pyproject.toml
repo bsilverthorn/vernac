@@ -25,3 +25,4 @@ dev = [
 [project.scripts]
 vernac = "vernac.compile:script_main"
 
+[tool.setuptools_scm]
