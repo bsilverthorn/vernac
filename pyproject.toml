@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vernac"
+requires-python = "~=3.11"
+dependencies = [
+    "requests",
+    "openai",
+    "shiv",
+    "tomli_w",
+    "rich",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "ipython",
+    "pip-tools",
+]
+
+[project.scripts]
+vernac = "vernac.compile:script_main"
+
