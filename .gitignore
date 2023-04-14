@@ -130,3 +130,6 @@ dmypy.json
 
 # asdf tool versions (individual to each developer)
 .tool-versions
+
+# direnv config (often contains secrets)
+.envrc
