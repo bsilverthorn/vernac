@@ -37,6 +37,20 @@ The dream is that you check the _English_ into git, not the code.
 
 Every modern programmer already uses ChatGPT to generate code, then copies the code into their own source file. That’s a bit like writing your application in assembly and occasionally pasting in output from your compiler. Stay in the highest-level language you have for as long as you can! Today, in the GPT era, our highest-level language is English.
 
+Usage
+-----
+
+### Install
+
+- `pip install vernac` or (recommended →) `pipx install vernac`
+
+### Run
+
+- `export OPENAI_API_KEY=<key>`
+- `vernac <source_in> -o <executable_out>`
+
+The executable bundles its dependencies _except_ for a Python interpreter.
+
 Missing features
 ----------------
 
