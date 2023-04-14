@@ -1,0 +1,15 @@
+download today's Hacker News front page articles
+print them in a table in the terminal ordered by votes
+
+avoid this error:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/bsilverthorn/Dropbox/Projects/vernac/examples/./hntoday/__main__.py", line 3, in <module>
+  File "/home/bsilverthorn/Dropbox/Projects/vernac/examples/./hntoday/_bootstrap/__init__.py", line 253, in bootstrap
+  File "/home/bsilverthorn/Dropbox/Projects/vernac/examples/./hntoday/_bootstrap/__init__.py", line 38, in run
+  File "/home/bsilverthorn/.shiv/hntoday_1b9245f84e4d5dbf0ee1b94a9e35ee2bef3021b431ac312bacdbb74cdbecdcc0/site-packages/compiled_by_vernac/main.py", line 12, in main
+    title = article.select_one('.storylink').text
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'text'

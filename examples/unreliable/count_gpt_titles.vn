@@ -1,0 +1,7 @@
+- find a way to download titles of historical Hacker News submissions
+- download titles from the past 7 days
+- only get submissions receiving more than 100 upvotes
+- for each day, count the number of titles that mention "GPT"
+- write the count for each day into a CSV file
+- print a progress update every 10 articles
+- be careful: when you fetch articles for a day, make sure you don't actually fetch articles *on or after* that day

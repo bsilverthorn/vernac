@@ -1,0 +1,5 @@
+as a command line arg, accept the name of another script
+generate a random 1000-line file and give it as an argument to the script
+measure how long it takes to run
+do the same thing with file sizes up to 100000 lines in increments of 10000
+show a graph of the times vs the file size

@@ -1,0 +1,8 @@
+the classic snake game, playable in the terminal
+the snake has a head and a body
+the body is two characters long at first
+the body grows longer each time you eat food
+the snake moves in its current direction at 5 hz
+pressing an arrow key changes its direction
+pressing 'q' quits the game
+food is the apple emoji

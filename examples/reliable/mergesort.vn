@@ -1,0 +1,3 @@
+take the path to a file as a command line argument
+read the lines in the file, sort them, and print them in lexicographic order
+use mergesort
