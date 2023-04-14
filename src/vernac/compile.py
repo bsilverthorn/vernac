@@ -2,6 +2,7 @@ import os
 import os.path
 import math
 import re
+import sys
 import argparse
 import subprocess
 
@@ -108,9 +109,9 @@ def get_dependencies(python: str) -> list[str]:
         model="gpt-4",
         task_title="Analyzing",
     )
-    dependencies = chat_completion.splitlines()
+    dependencies = set(chat_completion.splitlines()) - sys.stdlib_module_names
 
-    return dependencies
+    return list(dependencies)
 
 def compile(english: str):
     system_prompt = (
