@@ -64,6 +64,7 @@ Missing features
 - IDE plugins
 - Integration with other languages
 - Shebang mode
+- Non-OpenAI models
 - Anything non-Linux or non-Python
 - Anything to prevent your programs from behaving differently every time you recompile
 - …
