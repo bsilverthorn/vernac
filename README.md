@@ -68,6 +68,11 @@ Missing features
 - Anything to prevent your programs from behaving differently every time you recompile
 - …
 
+Related work
+------------
+
+- https://github.com/PrefectHQ/marvin
+
 FAQs
 ----
 
