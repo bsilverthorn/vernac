@@ -133,3 +133,6 @@ dmypy.json
 
 # direnv config (often contains secrets)
 .envrc
+
+# VS Code (not sure about this; can always add later)
+.vscode/
