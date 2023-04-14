@@ -142,7 +142,7 @@ def generate_pyproject(file: BinaryIO, deps: list[str]):
         },
         "project": {
             "name": "compiled_by_vernac",
-            "requires-python": "~=3.11",
+            "requires-python": ">=3.10",
             "dependencies": deps,
             "version": "0.0.1",
             "scripts": {
