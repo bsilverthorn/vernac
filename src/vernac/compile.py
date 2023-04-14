@@ -78,9 +78,11 @@ def strip_markdown_fence(markdown: str) -> str:
     match = re.search(pattern, markdown, re.DOTALL)
 
     if match:
-        return match.group("inner")
+        inner = match.group("inner")
     else:
-        return markdown
+        inner = markdown
+
+    return inner.strip() + "\n"
 
 def get_dependencies(python: str) -> list[str]:
     system_prompt = (
@@ -184,7 +186,7 @@ def package(python: str, out_path: str, deps: list[str]):
 
         progress.update(task, advance=1)
 
-def main(in_path: str, out_path: str):
+def main(in_path: str, out_path: str, verbose: bool = False):
 
     with progress:
         task = progress.add_task("Reading", total=1)
@@ -195,7 +197,14 @@ def main(in_path: str, out_path: str):
         progress.update(task, advance=1)
 
         python = compile(src)
+
+        if verbose:
+            print("# Source", "\n\n```\n", python, "```")
+
         deps = get_dependencies(python)
+
+        if verbose:
+            print("\n# Dependencies\n", deps)
 
         package(python, out_path, deps)
 
@@ -213,6 +222,11 @@ def parse_args():
         type=str,
         metavar="PATH",
         required=True,
+    )
+    parser.add_argument(
+        "-v",
+        dest="verbose",
+        action="store_true",
     )
 
     args = parser.parse_args()
