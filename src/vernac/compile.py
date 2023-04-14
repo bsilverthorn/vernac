@@ -34,7 +34,6 @@ progress = Progress(
     TextColumn("[progress.description]{task.description}"),
     BarColumn(),
     TaskProgressColumn(),
-    transient=True,
 )
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
