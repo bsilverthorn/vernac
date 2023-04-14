@@ -1,4 +1,5 @@
 import os
+import os.path
 import math
 import re
 import argparse
@@ -9,7 +10,10 @@ from typing import (
     BinaryIO,
     Iterable,
 )
-from subprocess import check_call
+from subprocess import (
+    check_output,
+    CalledProcessError,
+)
 from tempfile import TemporaryDirectory
 
 import openai
@@ -163,16 +167,25 @@ def package_in_dir(python: str, dir_path: str, deps: list[str]):
         generate_pyproject(file, deps)
 
 def shiv_package(dir_path: str, out_path: str):
-    check_call(
-        [
-            "shiv",
-            "-o", out_path,
-            "-c", "main",
-            dir_path,
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
+    # crudely guess the shiv bin location
+    python_dir = os.path.dirname(sys.executable)
+    shiv_path = os.path.join(python_dir, "shiv")
+
+    # run shiv to package
+    try:
+        check_output(
+            [
+                shiv_path,
+                "-o", out_path,
+                "-c", "main",
+                dir_path,
+            ],
+            stderr=subprocess.STDOUT,
+        )
+    except CalledProcessError as error:
+        print(error.output)
+
+        raise
 
 def package(python: str, out_path: str, deps: list[str]):
     task = progress.add_task("Packaging", total=2)
