@@ -49,6 +49,7 @@ Missing features
 - Explicit self-tests
 - IDE plugins
 - Integration with other languages
+- Shebang mode
 - Anything non-Linux or non-Python
 - Anything to prevent your programs from behaving differently every time you recompile
 - …
