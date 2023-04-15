@@ -16,8 +16,8 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-homepage = "https://github.com/bsilverthorn/vernac"
-repository = "https://github.com/bsilverthorn/vernac"
+"Homepage" = "https://github.com/bsilverthorn/vernac"
+"Repository" = "https://github.com/bsilverthorn/vernac"
 
 [project.optional-dependencies]
 dev = [
