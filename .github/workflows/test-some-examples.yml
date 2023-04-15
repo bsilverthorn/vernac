@@ -17,3 +17,5 @@ jobs:
           cd examples/reliable
           vernac fizzbuzz.vn -o fizzbuzz
           ./fizzbuzz
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
