@@ -23,8 +23,6 @@ dynamic = ["version"]
 dev = [
     "ipython",
     "pip-tools",
-    "build",
-    "twine",
 ]
 
 [project.scripts]
