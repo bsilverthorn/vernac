@@ -31,6 +31,8 @@ from rich.progress import (
 )
 from openai import ChatCompletion
 
+from vernac.util import strip_markdown_fence
+
 progress = Progress(
     SpinnerColumn(),
     TextColumn("[progress.description]{task.description}"),
@@ -87,17 +89,6 @@ def complete_chat(messages: list[dict], model="gpt-3.5-turbo", task_title=None):
         progress.update(task, completed=100)
 
     return completion
-
-def strip_markdown_fence(markdown: str) -> str:
-    pattern = r"```\s*\w*\s*\n(?P<inner>.*?)```"
-    match = re.search(pattern, markdown, re.DOTALL)
-
-    if match:
-        inner = match.group("inner")
-    else:
-        inner = markdown
-
-    return inner.strip() + "\n"
 
 def get_dependencies(python: str) -> list[str]:
     system_prompt = (
