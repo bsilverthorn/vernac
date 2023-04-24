@@ -13,6 +13,7 @@ dependencies = [
     "shiv",
     "tomli_w",
     "rich",
+    "pytest",
 ]
 dynamic = ["version"]
 
