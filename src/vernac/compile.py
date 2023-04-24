@@ -20,7 +20,8 @@ from tempfile import TemporaryDirectory
 import openai
 import tomli_w
 
-from rich import print
+from rich import print as rich_print
+from rich.markup import escape
 from rich.progress import (
     Progress,
     SpinnerColumn,
@@ -37,6 +38,16 @@ progress = Progress(
     TaskProgressColumn(),
 )
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def print(*args, **kwargs):
+    def yield_args():
+        for arg in args:
+            if isinstance(arg, str):
+                yield escape(arg)
+            else:
+                yield arg
+
+    rich_print(*yield_args(), **kwargs)
 
 def normalize_progress(x, scale=100, divisor=32, max_y=0.99):
     return scale * min(
@@ -130,7 +141,7 @@ def compile(english: str):
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
-    chat_completion = complete_chat(chat_messages, task_title="Compiling")
+    chat_completion = complete_chat(chat_messages, task_title="Compiling", model="gpt-4")
     python = strip_markdown_fence(chat_completion)
 
     return python
