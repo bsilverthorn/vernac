@@ -15,6 +15,7 @@ from subprocess import (
     CalledProcessError,
 )
 from tempfile import TemporaryDirectory
+from dataclasses import dataclass
 
 import openai
 import tomli_w
@@ -115,7 +116,17 @@ def get_dependencies(python: str) -> list[str]:
 
     return list(dependencies)
 
-def compile(english: str):
+@dataclass
+class TestFailure:
+    input: str
+    expected: str
+    actual: str
+
+def compile(
+        english: str,
+        first_draft: str | None = None,
+        test_failures: list[TestFailure] = [],
+    ) -> str:
     system_prompt = (
         "You are an expert programmer working on contract. "
         "The user, your client, will provide a description of program functionality. "
@@ -125,9 +136,25 @@ def compile(english: str):
     )
     user_prompt = (
         "Please write the following program in Python 3. "
-        "Include a `main` function that takes no arguments and returns nothing."
+        "Include a `main` function that takes no arguments and returns nothing. "
+        "Use `argparse` to parse command line arguments."
         f"\n\n# Program Spec\n\n{english}\n"
     )
+
+    if first_draft is not None:
+        user_prompt += (
+            "# First draft\n\n"
+            f"```\n{first_draft}```\n"
+        )
+
+    for (i, failure) in enumerate(test_failures):
+        user_prompt += (
+            f"\n# First draft test {i + 1}\n\n"
+            f"Input: {failure.input}\n\n"
+            f"Expected Output: {failure.expected}\n\n"
+            f"Actual Output: {str(failure.actual)}\n"
+        )
+
     chat_messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
@@ -201,27 +228,65 @@ def package(python: str, out_path: str, deps: list[str]):
 
         progress.update(task, advance=1)
 
+def assess_run_help(out_path: str) -> list[TestFailure]:
+    try:
+        output = check_output(
+            [
+                os.path.abspath(out_path),
+                "--help",
+            ],
+            stderr=subprocess.STDOUT,
+        )
+    except CalledProcessError as error:
+        return [
+            TestFailure(
+                input="Ran program with `--help`.",
+                expected="Standard help text",
+                actual=error.output,
+            ),
+        ]
+    else:
+        return []
+
 def main(in_path: str, out_path: str, verbose: bool = False):
+    test_failures = None
+    first_draft = None
+    passes = 0
 
     with progress:
-        task = progress.add_task("Reading", total=1)
+        while test_failures != []:
+            if passes > 4:
+                raise Exception("too many passes")
 
-        with open(in_path, "r") as f:
-            src = f.read()
+            task = progress.add_task("Reading", total=1)
 
-        progress.update(task, advance=1)
+            with open(in_path, "r") as f:
+                src = f.read()
 
-        python = compile(src)
+            progress.update(task, advance=1)
 
-        if verbose:
-            print("# Source", "\n\n```\n", python, "```")
+            if test_failures is None:
+                test_failures = []
 
-        deps = get_dependencies(python)
+            python = compile(
+                src,
+                first_draft=first_draft,
+                test_failures=test_failures,
+            )
 
-        if verbose:
-            print("\n# Dependencies\n", deps)
+            if verbose:
+                print("# Source", "\n\n```\n", python, "```")
 
-        package(python, out_path, deps)
+            deps = get_dependencies(python)
+
+            if verbose:
+                print("\n# Dependencies\n", deps)
+
+            package(python, out_path, deps)
+
+            test_failures = assess_run_help(out_path)
+            first_draft = python
+            passes += 1
 
 def parse_args():
     parser = argparse.ArgumentParser()
