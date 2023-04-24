@@ -1,0 +1,4 @@
+- accept command line arguments for beginning and ending dates
+- scrape all text from the entire hacker news front page for those dates
+- count the number of times the word "GPT" appears
+- print the number of occurrences per day
