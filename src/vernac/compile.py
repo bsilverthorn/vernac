@@ -96,6 +96,7 @@ def get_dependencies(python: str) -> list[str]:
         "Respond with a list of Python packages that must be installed to run the program. "
         "Standard library packages do not need to be installed and should be ignored. "
         "Write one package per line. "
+        "If no packages are required, write nothing. "
         "Do not write any other formatting or commentary."
     )
     user_prompt = (
