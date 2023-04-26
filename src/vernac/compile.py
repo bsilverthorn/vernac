@@ -57,8 +57,6 @@ def main(in_path: str, out_path: str, verbose: bool = False):
         GenerateCodeStage("Generating code"),
         GuessDependenciesStage("Guessing dependencies"),
         PackageStage("Packaging", out_path=out_path),
-        CheckHelpStage("Checking --help"),
-        CheckTestsStage("Checking test output"),
     ]
     stage_index = 0
     stage_number = 0
