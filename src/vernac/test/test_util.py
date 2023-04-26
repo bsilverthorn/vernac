@@ -1,6 +1,9 @@
 import pytest
 
-from vernac.util import strip_markdown_fence
+from vernac.util import (
+    strip_markdown_fence,
+    normalize_progress,
+)
 
 @pytest.mark.parametrize("markdown, expected", [
     (
@@ -30,3 +33,9 @@ from vernac.util import strip_markdown_fence
 ])
 def test_strip_markdown_fence(markdown, expected):
     assert strip_markdown_fence(markdown) == expected
+
+def test_normalize_progress():
+    assert normalize_progress(0) == 0
+
+    for i in range(1, 1000, 10):
+        assert normalize_progress(i) < 100
