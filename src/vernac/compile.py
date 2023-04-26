@@ -59,6 +59,8 @@ def main(in_path: str, out_path: str, verbose: bool = False):
         GenerateCodeStage("Generating code"),
         GuessDependenciesStage("Guessing dependencies"),
         PackageStage("Packaging", out_path=out_path),
+        CheckHelpStage("Checking --help"),
+        CheckTestsStage("Checking test output"),
     ]
     stage_index = 0
     stage_number = 0
@@ -86,7 +88,9 @@ def main(in_path: str, out_path: str, verbose: bool = False):
 
             match output.action:
                 case StageAction.LOOP:
-                    stage_index = 0
+                    # XXX hack
+                    stage_index = 1
+                    state = dict(english=state["english"])
 
                 case StageAction.NEXT:
                     stage_index += 1
