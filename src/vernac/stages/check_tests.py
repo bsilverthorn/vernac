@@ -116,7 +116,7 @@ def check_suggested_test(
     except CalledProcessError as error:
         context.log_bytes("output.txt", error.output)
 
-        description = error.output + f"\n<exit code {error.returncode}>"
+        description = error.output.decode("utf-8") + f"\n<exit code {error.returncode}>"
 
         return TestFailure(
             input=f"Ran program with `{' '.join(program_args)}`.",
@@ -173,7 +173,12 @@ class CheckTestsStage(VernacStage):
             if failure is not None:
                 failures.append(failure)
 
+        context.log_json(
+            "failures.json",
+            [f.__dict__ for f in failures],
+        )
+
         return StageOutput(
-            action=StageAction.NEXT,
+            action=StageAction.NEXT if len(failures) == 0 else StageAction.LOOP,
             state=dict(failures=failures),
         )
