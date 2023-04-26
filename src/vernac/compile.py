@@ -24,6 +24,8 @@ from vernac.stages.all import (
     GenerateCodeStage,
     GuessDependenciesStage,
     PackageStage,
+    CheckHelpStage,
+    CheckTestsStage,
 )
 
 progress = Progress(

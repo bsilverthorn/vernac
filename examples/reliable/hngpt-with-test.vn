@@ -1,0 +1,8 @@
+- accept command line arguments for beginning and ending dates
+- scrape all text from the entire hacker news front page for those dates
+- count the number of times the word "GPT" appears
+- print the number of occurrences per day
+
+# tests
+
+- run `./program 2023-04-01 2023-04-01` (correct output is 2)
