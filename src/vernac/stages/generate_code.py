@@ -21,8 +21,9 @@ class TestFailure:
 class GenerateCodeStage(VernacStage):
     steps = 100
 
-    def __init__(self, title: str):
+    def __init__(self, title: str, inject_first: str | None = None):
         self.title = title
+        self.inject_first = inject_first
 
     def run(
             self,
@@ -32,6 +33,17 @@ class GenerateCodeStage(VernacStage):
             test_failures: list[TestFailure] = [],
             **kwargs,
         ) -> StageOutput:
+        # skip codegen if we're injecting
+        if self.inject_first is not None:
+            output = StageOutput(
+                action=StageAction.NEXT,
+                state=dict(python=self.inject_first),
+            )
+
+            self.inject_first = None
+
+            return output
+
         # prepare prompt
         system_prompt = (
             "You are an expert programmer working on contract. "

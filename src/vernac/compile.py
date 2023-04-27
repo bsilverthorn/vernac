@@ -54,10 +54,21 @@ def leaf_log_dir_name(stage_number: int, stage_title: str):
 
     return leaf_dir
 
-def main(in_path: str, out_path: str, verbose: bool = False):
+def main(
+        in_path: str,
+        out_path: str,
+        verbose: bool = False,
+        inject_first_path: str | None = None,
+    ):
+    if inject_first_path is None:
+        inject_first = None
+    else:
+        with open(inject_first_path) as inject_first_file:
+            inject_first = inject_first_file.read()
+
     stages = [
         ReadSourceStage("Reading source"),
-        GenerateCodeStage("Generating code"),
+        GenerateCodeStage("Generating code", inject_first=inject_first),
         GuessDependenciesStage("Guessing dependencies"),
         PackageStage("Packaging", out_path=out_path),
         CheckHelpStage("Checking --help"),
@@ -119,6 +130,11 @@ def parse_args():
         "-v",
         dest="verbose",
         action="store_true",
+    )
+    parser.add_argument(
+        "--inject-first",
+        metavar="PATH",
+        dest="inject_first_path",
     )
 
     args = parser.parse_args()
