@@ -15,6 +15,7 @@ from rich.progress import (
     TaskProgressColumn,
 )
 
+from vernac.util import call_with_supported_args
 from vernac.stages.interface import (
     StageContext,
     StageAction,
@@ -82,15 +83,16 @@ def main(in_path: str, out_path: str, verbose: bool = False):
                 progress=progress,
                 progress_task=task,
             )
-            output = stage.run(context, **state)
+            output = call_with_supported_args(
+                stage.run,
+                dict(context=context) | state,
+            )
 
             progress.update(task, completed=stage.steps)
 
             match output.action:
                 case StageAction.LOOP:
-                    # XXX hack
-                    stage_index = 1
-                    state = dict(english=state["english"])
+                    stage_index = 0
 
                 case StageAction.NEXT:
                     stage_index += 1

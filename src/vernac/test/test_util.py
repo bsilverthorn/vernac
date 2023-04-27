@@ -3,6 +3,7 @@ import pytest
 from vernac.util import (
     strip_markdown_fence,
     normalize_progress,
+    call_with_supported_args,
 )
 
 @pytest.mark.parametrize("markdown, expected", [
@@ -39,3 +40,10 @@ def test_normalize_progress():
 
     for i in range(1, 1000, 10):
         assert normalize_progress(i) < 100
+
+def test_call_with_supported_args():
+    def f(a, b, c=0):
+        return a + b + c
+
+    assert call_with_supported_args(f, dict(a=1, b=2)) == 3
+    assert call_with_supported_args(f, dict(a=1, b=2, c=3)) == 6
