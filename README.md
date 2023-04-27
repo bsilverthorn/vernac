@@ -73,6 +73,7 @@ Related work
 ------------
 
 - https://github.com/PrefectHQ/marvin
+- https://github.com/jina-ai/gptdeploy
 
 FAQs
 ----
