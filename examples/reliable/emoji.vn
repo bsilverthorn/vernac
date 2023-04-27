@@ -1,0 +1,12 @@
+- fetch all emoji from https://emojihub.yurace.pro/api/all
+- if a keyword is given as command line arg, pick the emoji with the most similar name
+- otherwise pick a random emoji
+- convert its unicode code point into a character and print that
+
+# references
+
+the emojihub API returns data like this:
+
+```
+{'name': 'minidisc', 'category': 'objects', 'group': 'objects', 'htmlCode': ['&#128189;'], 'unicode': ['U+1F4BD']}
+```
