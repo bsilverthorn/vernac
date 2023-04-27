@@ -15,6 +15,7 @@ from rich.progress import (
     TaskProgressColumn,
 )
 
+from vernac.util import call_with_supported_args
 from vernac.stages.interface import (
     StageContext,
     StageAction,
@@ -24,6 +25,8 @@ from vernac.stages.all import (
     GenerateCodeStage,
     GuessDependenciesStage,
     PackageStage,
+    CheckHelpStage,
+    CheckTestsStage,
 )
 
 progress = Progress(
@@ -51,12 +54,25 @@ def leaf_log_dir_name(stage_number: int, stage_title: str):
 
     return leaf_dir
 
-def main(in_path: str, out_path: str, verbose: bool = False):
+def main(
+        in_path: str,
+        out_path: str,
+        verbose: bool = False,
+        inject_first_path: str | None = None,
+    ):
+    if inject_first_path is None:
+        inject_first = None
+    else:
+        with open(inject_first_path) as inject_first_file:
+            inject_first = inject_first_file.read()
+
     stages = [
         ReadSourceStage("Reading source"),
-        GenerateCodeStage("Generating code"),
+        GenerateCodeStage("Generating code", inject_first=inject_first),
         GuessDependenciesStage("Guessing dependencies"),
         PackageStage("Packaging", out_path=out_path),
+        CheckHelpStage("Checking --help"),
+        CheckTestsStage("Checking test output"),
     ]
     stage_index = 0
     stage_number = 0
@@ -78,7 +94,10 @@ def main(in_path: str, out_path: str, verbose: bool = False):
                 progress=progress,
                 progress_task=task,
             )
-            output = stage.run(context, **state)
+            output = call_with_supported_args(
+                stage.run,
+                dict(context=context) | state,
+            )
 
             progress.update(task, completed=stage.steps)
 
@@ -111,6 +130,11 @@ def parse_args():
         "-v",
         dest="verbose",
         action="store_true",
+    )
+    parser.add_argument(
+        "--inject-first",
+        metavar="PATH",
+        dest="inject_first_path",
     )
 
     args = parser.parse_args()

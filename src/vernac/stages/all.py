@@ -5,3 +5,5 @@ from .generate_code import (
 )
 from .guess_dependencies import GuessDependenciesStage
 from .package import PackageStage
+from .check_help import CheckHelpStage
+from .check_tests import CheckTestsStage
