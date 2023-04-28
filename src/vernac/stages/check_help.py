@@ -23,6 +23,7 @@ class CheckHelpStage(VernacStage):
     def run(
             self,
             context: StageContext,
+            python: str,
             out_path: str,
             **kwargs,
         ) -> StageOutput:
@@ -46,7 +47,7 @@ class CheckHelpStage(VernacStage):
 
             return StageOutput(
                 action=StageAction.LOOP,
-                state=dict(failures=[failure]),
+                state=dict(failures=[failure], first_draft=python),
             )
         else:
             context.log_bytes("output.txt", output)

@@ -154,6 +154,7 @@ class CheckTestsStage(VernacStage):
             self,
             context: StageContext,
             english: str,
+            python: str,
             out_path: str,
             failures: list[TestFailure] = [],
             **kwargs,
@@ -181,5 +182,5 @@ class CheckTestsStage(VernacStage):
 
         return StageOutput(
             action=StageAction.NEXT if len(failures) == 0 else StageAction.LOOP,
-            state=dict(failures=failures),
+            state=dict(failures=failures, first_draft=python),
         )
