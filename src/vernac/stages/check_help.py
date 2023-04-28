@@ -33,6 +33,7 @@ class CheckHelpStage(VernacStage):
                     "--help",
                 ],
                 stderr=subprocess.STDOUT,
+                timeout=8.0,
             )
         except CalledProcessError as error:
             context.log_bytes("output.txt", error.output)

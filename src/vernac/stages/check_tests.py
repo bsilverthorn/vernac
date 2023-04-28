@@ -112,6 +112,7 @@ def check_suggested_test(
         output = check_output(
             [program_path] + program_args,
             stderr=subprocess.STDOUT,
+            timeout=16.0,
         )
     except CalledProcessError as error:
         context.log_bytes("output.txt", error.output)
