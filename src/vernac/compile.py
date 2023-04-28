@@ -68,7 +68,11 @@ def main(
 
     stages = [
         ReadSourceStage("Reading source"),
-        GenerateCodeStage("Generating code", inject_first=inject_first),
+        GenerateCodeStage(
+            "Generating code",
+            inject_first=inject_first,
+            verbose=verbose,
+        ),
         GuessDependenciesStage("Guessing dependencies"),
         PackageStage("Packaging", out_path=out_path),
         CheckHelpStage("Checking --help"),

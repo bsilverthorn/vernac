@@ -21,9 +21,15 @@ class TestFailure:
 class GenerateCodeStage(VernacStage):
     steps = 100
 
-    def __init__(self, title: str, inject_first: str | None = None):
+    def __init__(
+            self,
+            title: str,
+            inject_first: str | None = None,
+            verbose: bool = False,
+        ):
         self.title = title
         self.inject_first = inject_first
+        self.verbose = verbose
 
     def run(
             self,
@@ -93,6 +99,9 @@ class GenerateCodeStage(VernacStage):
         context.log_text("completion.txt", chat_completion)
 
         python = strip_markdown_fence(chat_completion)
+
+        if self.verbose:
+            print(python)
 
         context.log_text("code.py", python)
 
