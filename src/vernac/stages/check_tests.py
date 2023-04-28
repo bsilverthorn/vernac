@@ -156,12 +156,12 @@ class CheckTestsStage(VernacStage):
             english: str,
             python: str,
             out_path: str,
-            failures: list[TestFailure] = [],
+            test_failures: list[TestFailure] = [],
             **kwargs,
         ) -> StageOutput:
         program_path = os.path.abspath(out_path)
         suggested_tests = extract_suggested_tests(context, english)
-        failures = list(failures)
+        test_failures = list(test_failures)
 
         for suggested_test in suggested_tests:
             failure = check_suggested_test(
@@ -173,14 +173,14 @@ class CheckTestsStage(VernacStage):
             )
 
             if failure is not None:
-                failures.append(failure)
+                test_failures.append(failure)
 
         context.log_json(
             "failures.json",
-            [f.__dict__ for f in failures],
+            [f.__dict__ for f in test_failures],
         )
 
         return StageOutput(
-            action=StageAction.NEXT if len(failures) == 0 else StageAction.LOOP,
-            state=dict(failures=failures, first_draft=python),
+            action=StageAction.NEXT if len(test_failures) == 0 else StageAction.LOOP,
+            state=dict(test_failures=test_failures, first_draft=python),
         )

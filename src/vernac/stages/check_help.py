@@ -47,13 +47,13 @@ class CheckHelpStage(VernacStage):
 
             return StageOutput(
                 action=StageAction.LOOP,
-                state=dict(failures=[failure], first_draft=python),
+                state=dict(test_failures=[failure], first_draft=python),
             )
         else:
             context.log_bytes("output.txt", output)
 
             return StageOutput(
                 action=StageAction.NEXT,
-                state=dict(failures=[]),
+                state=dict(test_failures=[]),
             )
 
