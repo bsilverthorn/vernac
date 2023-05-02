@@ -56,7 +56,7 @@ Examples
 
 ### Hitting an API: `emoji`
 
-ChatGPT will have some stale information about an API, but it's often best to paste in relevant details:
+ChatGPT may remember _some_ stale information about an API, but often it's best to paste in relevant details:
 
 ```markdown
 - fetch all emoji from https://emojihub.yurace.pro/api/all
