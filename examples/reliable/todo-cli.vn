@@ -1,0 +1,19 @@
+# terminal-based todo list
+
+todo list entries have
+
+- number
+- description
+- status (done, not done)
+
+## usage
+
+- add <description> (add a new todo list entry, print the number)
+- list (list all todo list entries)
+- done <number> (mark todo list entry as done)
+- undone <number> (mark todo list entry as not done)
+- remove <number> (remove todo list entry)
+
+## storage
+
+todo list entries are stored in `~/.todo` as json
