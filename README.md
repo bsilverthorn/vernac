@@ -58,7 +58,7 @@ Examples
 
 ChatGPT may remember _some_ stale information about an API, but often it's best to paste in relevant details:
 
-```markdown
+````markdown
 - fetch all emoji from https://emojihub.yurace.pro/api/all
 - if a keyword is given as command line arg, pick the emoji with the most similar name
 - otherwise pick a random emoji
@@ -68,10 +68,10 @@ ChatGPT may remember _some_ stale information about an API, but often it's best 
 
 the emojihub API returns data like this:
 
-\```
-{'name': 'minidisc', 'category': 'objects', 'group': 'objects', 'htmlCode': ['&#128189;'], 'unicode': ['U+1F4BD']}
-\```
 ```
+{'name': 'minidisc', 'category': 'objects', 'group': 'objects', 'htmlCode': ['&#128189;'], 'unicode': ['U+1F4BD']}
+```
+````
 
 ### Splitting code into modules: `todo`
 
