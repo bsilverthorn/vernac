@@ -14,6 +14,7 @@ dependencies = [
     "tomli_w",
     "rich",
     "pytest",
+    "pytest-asyncio",
 ]
 dynamic = ["version"]
 
