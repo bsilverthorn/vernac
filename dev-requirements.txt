@@ -85,6 +85,10 @@ pygments==2.15.0
 pyproject-hooks==1.0.0
     # via build
 pytest==7.3.1
+    # via
+    #   pytest-asyncio
+    #   vernac (pyproject.toml)
+pytest-asyncio==0.21.0
     # via vernac (pyproject.toml)
 requests==2.28.2
     # via

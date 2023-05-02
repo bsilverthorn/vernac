@@ -9,10 +9,11 @@ from subprocess import (
     CalledProcessError,
 )
 from tempfile import TemporaryDirectory
+from itertools import chain
+from contextlib import nullcontext
 
 import tomli_w
 
-from vernac.openai import complete_chat
 from vernac.stages.interface import (
     VernacStage,
     StageContext,
@@ -27,26 +28,29 @@ def generate_pyproject(file: BinaryIO, deps: list[str]):
             "build-backend": "setuptools.build_meta"
         },
         "project": {
-            "name": "compiled_by_vernac",
+            "name": "vnprog",
             "requires-python": ">=3.10",
             "dependencies": deps,
             "version": "0.0.1",
             "scripts": {
-                "main": "compiled_by_vernac.main:main"
+                "main": "vnprog.main:main"
             },
         },
     }
 
     tomli_w.dump(data, file)
 
-def package_in_dir(python: str, dir_path: str, deps: list[str]):
-    def to_dir(rel_path: str) -> str:
-        return os.path.join(dir_path, rel_path)
+def package_in_dir(py_files: dict[str, str], dir_path: str, deps: list[str]):
+    def to_dir(*rel_paths: str) -> str:
+        return os.path.join(dir_path, *rel_paths)
 
-    os.makedirs(to_dir("src/compiled_by_vernac"))
+    os.makedirs(to_dir("src/vnprog"), exist_ok=True)
 
-    with open(to_dir("src/compiled_by_vernac/main.py"), "w") as file:
-        file.write(python)
+    for (filename, python) in py_files.items():
+        py_path = to_dir("src/vnprog", filename)
+
+        with open(py_path, "wt") as file:
+            file.write(python)
 
     with open(to_dir("pyproject.toml"), "wb") as file:
         generate_pyproject(file, deps)
@@ -75,25 +79,51 @@ def shiv_package(dir_path: str, out_path: str):
 class PackageStage(VernacStage):
     steps = 2
 
-    def __init__(self, title: str, out_path: str):
+    def __init__(
+            self,
+            title: str,
+            out_path: str,
+            package_dir: str | None = None,
+        ):
         self.title = title
         self.out_path = out_path
+        self.package_dir = package_dir
 
     def run(
             self,
             context: StageContext,
             python: str,
             dependencies: list[str],
-            **kwargs,
+            modules: dict[str, dict],
         ) -> StageOutput:
-        with TemporaryDirectory(prefix="vernac") as tmpdir:
-            package_in_dir(python=python, dir_path=tmpdir, deps=dependencies)
+        py_files = {"main.py": python}
+
+        for module in modules.values():
+            py_files[module["py_name"]] = module["python"]
+
+        module_deps = chain.from_iterable(
+            m["dependencies"] for m in modules.values()
+        )
+
+        if self.package_dir is None:
+            tmpdir_context = TemporaryDirectory(prefix="vernac-")
+        else:
+            tmpdir_context = nullcontext(
+                os.path.abspath(self.package_dir),
+            )
+
+        with tmpdir_context as tmpdir:
+            package_in_dir(
+                py_files=py_files,
+                dir_path=tmpdir,
+                deps=dependencies + list(module_deps),
+            )
 
             context.advance_progress()
 
             shiv_package(dir_path=tmpdir, out_path=self.out_path)
 
-            context.advance_progress()
+        context.advance_progress()
 
         return StageOutput(
             action=StageAction.NEXT,
