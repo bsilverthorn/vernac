@@ -51,6 +51,79 @@ Usage
 
 The executable bundles its dependencies _except_ for a Python interpreter.
 
+Examples
+--------
+
+### Hitting an API: `emoji`
+
+ChatGPT will have some stale information about an API, but it's often best to paste in relevant details:
+
+```markdown
+- fetch all emoji from https://emojihub.yurace.pro/api/all
+- if a keyword is given as command line arg, pick the emoji with the most similar name
+- otherwise pick a random emoji
+- convert its unicode code point into a character and print that
+
+# references
+
+the emojihub API returns data like this:
+
+\```
+{'name': 'minidisc', 'category': 'objects', 'group': 'objects', 'htmlCode': ['&#128189;'], 'unicode': ['U+1F4BD']}
+\```
+```
+
+### Splitting code into modules: `todo`
+
+Vernac can accept multiple input files. It will compile each one separately, guessing which are modules and which is the main program.
+
+#### `todo-storage.vn`
+
+```markdown
+# storage module
+
+todo list entries have
+
+- number
+- description
+- status (done, not done)
+
+todo list entries are stored in `~/.todo` as a json list of objects
+```
+
+#### `todo-tui.vn`
+
+```markdown
+# terminal-based todo list
+
+todo list entries have
+
+- number
+- description
+- status (done, not done)
+
+## usage
+
+- running the program shows a list of all todo list entries ordered by number
+- one entry is selected at a time
+- up/down arrow keys change the selection
+- pressing d toggles the status of the selected entry
+- pressing the del key removes the selected entry
+- pressing c pops creates a new entry
+- pressing s saves to the file
+- pressing q saves and quits
+- running with `--help` prints instructions and exits immediately
+
+*Note: Ensure that any HTML strings are properly formatted, i.e., all tags are correctly opened and closed.*
+
+## creating a new entry
+
+- to create a new entry, present a dialog to the user
+- it should have one text field to provide the description
+- pressing esc should close the dialog without creating an entry
+- new entries are selected automatically after they are created
+```
+
 Missing features
 ----------------
 
