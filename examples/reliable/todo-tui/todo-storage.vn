@@ -1,0 +1,9 @@
+# storage module
+
+todo list entries have
+
+- number
+- description
+- status (done, not done)
+
+todo list entries are stored in `~/.todo` as a json list of objects
