@@ -1,6 +1,12 @@
 import re
+import os.path
 import math
 import inspect
+
+from typing import (
+    Callable,
+    TypeVar,
+)
 
 def strip_markdown_fence(markdown: str) -> str:
     pattern = r"```\s*\w*\s*\n(?P<inner>.*?)```"
@@ -19,9 +25,26 @@ def normalize_progress(x, scale=100, divisor=64, max_y=0.99):
         (1 - math.exp(-x / divisor)),
     )
 
-def call_with_supported_args(func, args_dict):
+def str_to_filename(string: str):
+    str_lower = string.lower()
+    spaces_replaced = re.sub(r"\s+", "_", str_lower)
+    only_safe = re.sub(r"[^\w_]", "", spaces_replaced)
+
+    return only_safe
+
+T = TypeVar("T")
+
+async def call_with_supported_args(func: Callable[..., T], args_dict: dict) -> T:
     func_sig = inspect.signature(func)
     func_params = {p.name for p in func_sig.parameters.values()}
     supported_args = {k: v for k, v in args_dict.items() if k in func_params}
 
-    return func(**supported_args)
+    if inspect.iscoroutinefunction(func):
+        return await func(**supported_args)
+    else:
+        return func(**supported_args)
+
+def replace_ext(path, new_ext):
+    (name, _) = os.path.splitext(path)
+
+    return f"{name}.{new_ext}"

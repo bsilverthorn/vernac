@@ -52,7 +52,8 @@ class GuessDependenciesStage(VernacStage):
 
         context.log_text("completion.txt", chat_completion)
 
-        dependencies = list(set(chat_completion.splitlines()) - sys.stdlib_module_names)
+        dependencies = set(chat_completion.splitlines()) - sys.stdlib_module_names
+        dependencies = [d for d in dependencies if not d.startswith("vnprog")]
 
         context.log_json("dependencies.json", dependencies)
 

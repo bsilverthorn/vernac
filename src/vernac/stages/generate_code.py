@@ -11,6 +11,7 @@ from vernac.stages.interface import (
     StageAction,
     StageOutput,
 )
+from vernac.stages.map_modules import SourceType
 
 @dataclass
 class TestFailure:
@@ -18,16 +19,47 @@ class TestFailure:
     expected: str
     actual: str
 
+def get_main_prompts(english: str) -> tuple[str, str]:
+    system_prompt = (
+        "You are an expert programmer working on contract. "
+        "The user, your client, will provide a description of program functionality. "
+        "Respond with Python 3 source code implementing that description. " 
+        "Respond only with the source code inside a Markdown code block. "
+        "Do not add commentary."
+    )
+    user_prompt = (
+        "Please write the following program in Python 3. "
+        "Include a `main` function that takes no arguments and returns nothing. "
+        "Use `argparse` to parse command line arguments."
+        f"\n\n# Program Spec\n\n{english}\n"
+    )
+
+    return (system_prompt, user_prompt)
+
+def get_module_prompts(english: str) -> tuple[str, str]:
+    system_prompt = (
+        "You are an expert programmer working on contract. "
+        "The user, your client, will provide a description of one specific module. "
+        "Respond with Python 3 source code implementing that module. "
+        "Respond only with the source code inside a Markdown code block. "
+        "Do not add commentary."
+    )
+    user_prompt = english
+
+    return (system_prompt, user_prompt)
+
 class GenerateCodeStage(VernacStage):
     steps = 100
 
     def __init__(
             self,
             title: str,
+            source_type: SourceType,
             inject_first: str | None = None,
             verbose: bool = False,
         ):
         self.title = title
+        self.source_type = source_type
         self.inject_first = inject_first
         self.verbose = verbose
 
@@ -35,9 +67,9 @@ class GenerateCodeStage(VernacStage):
             self,
             context: StageContext,
             english: str,
+            modules: dict[str, dict] = {},
             first_draft: str | None = None,
             test_failures: list[TestFailure] = [],
-            **kwargs,
         ) -> StageOutput:
         # skip codegen if we're injecting
         if self.inject_first is not None:
@@ -51,19 +83,19 @@ class GenerateCodeStage(VernacStage):
             return output
 
         # prepare prompt
-        system_prompt = (
-            "You are an expert programmer working on contract. "
-            "The user, your client, will provide a description of program functionality. "
-            "Respond with Python 3 source code implementing that description. " 
-            "Respond only with the source code inside a Markdown code block. "
-            "Do not add commentary."
-        )
-        user_prompt = (
-            "Please write the following program in Python 3. "
-            "Include a `main` function that takes no arguments and returns nothing. "
-            "Use `argparse` to parse command line arguments."
-            f"\n\n# Program Spec\n\n{english}\n"
-        )
+        match self.source_type:
+            case SourceType.MAIN:
+                (system_prompt, user_prompt) = get_main_prompts(english)
+
+            case SourceType.MODULE:
+                (system_prompt, user_prompt) = get_module_prompts(english)
+
+        for (name, module) in modules.items():
+            user_prompt += (
+                f"\n\n# Module: `{module['py_name']}`\n\n"
+                "This module has already been written. It can be imported from the `vnprog` package.\n\n"
+                f"{module['documentation']}\n\n"
+            )
 
         if first_draft is not None:
             user_prompt += (
