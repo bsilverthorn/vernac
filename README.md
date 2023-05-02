@@ -73,6 +73,21 @@ the emojihub API returns data like this:
 ```
 ````
 
+### Writing tests: `fizzbuzz-with-tests`
+
+Describe test cases and Vernac will run them during compilation:
+
+```markdown
+accept N as a command line arg
+print all the numbers between 1 and N
+print 'fizz' instead of the number if it’s divisible by 3
+print 'buzz' if it’s divisible by 5
+
+# tests
+
+do the right thing with N=20
+```
+
 ### Splitting code into modules: `todo`
 
 Vernac can accept multiple input files. It will compile each one separately, guessing which are modules and which is the main program.
