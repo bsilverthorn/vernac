@@ -136,3 +136,6 @@ dmypy.json
 
 # VS Code (not sure about this; can always add later)
 .vscode/
+
+# vernac logs dir
+logs/
