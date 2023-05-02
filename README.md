@@ -139,24 +139,6 @@ todo list entries have
 - new entries are selected automatically after they are created
 ```
 
-Missing features
-----------------
-
-- Modules
-- Documentation
-- API lookup
-- Error messages
-- Configuration
-- Implicit self-tests
-- Explicit self-tests
-- IDE plugins
-- Integration with other languages
-- Shebang mode
-- Non-OpenAI models
-- Anything non-Linux or non-Python
-- Anything to prevent your programs from behaving differently every time you recompile
-- …
-
 Related work
 ------------
 
@@ -165,6 +147,10 @@ Related work
 
 FAQs
 ----
+
+### What prevents my programs from behaving differently every time I recompile?
+
+Nothing.
 
 ### What about non-English languages?
 
