@@ -40,6 +40,11 @@ Every modern programmer already uses ChatGPT to generate code, then copies the c
 Usage
 -----
 
+### Prerequisites
+
+- Python 3.10+
+- OpenAI API key with GPT-4
+
 ### Install
 
 - `pip install vernac` or (recommended →) `pipx install vernac`
