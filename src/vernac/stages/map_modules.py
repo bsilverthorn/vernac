@@ -23,7 +23,7 @@ def classify_source_type(
         context: StageContext,
         filename: str,
         english: str,
-    ) -> str | None:
+    ) -> SourceType:
     # prepare prompt
     system_prompt = """
 You are an expert programmer working on contract. The user, your client, has created specs for various modules. You need to start by identifying which spec describes the main module for the program.

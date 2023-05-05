@@ -70,7 +70,7 @@ class StageAction(Enum):
     LOOP = auto()
 
     @classmethod
-    def out(cls, **state: dict) -> "StageOutput":
+    def out(cls, **state: Any) -> "StageOutput":
         return StageOutput(
             action=cls.NEXT,
             state=state,
