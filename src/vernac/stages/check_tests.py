@@ -20,7 +20,7 @@ from vernac.stages.generate_code import TestFailure
 def extract_suggested_tests(context: StageContext, english: str) -> list[dict]:
     # prepare prompt
     system_prompt = """
-You are an expert programmer working on contract. The user, your client, will provide a description of program functionality. You will provide details of how to execute any tests listed in the spec.
+You are an expert programmer working on contract. The user, your client, will provide a description of program functionality. You will provide details of how to execute any tests listed in the spec. Relevant documentation might also be provided, but should be ignored. Only look at tests included with the program spec, not in any documentation.
 
 For each test listed in the spec, extract the arguments to run along with any description of correct output. List that information a single line of JSON in the following format:
 

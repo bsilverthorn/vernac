@@ -23,7 +23,8 @@ def get_main_prompts(english: str) -> tuple[str, str]:
     system_prompt = (
         "You are an expert programmer working on contract. "
         "The user, your client, will provide a description of program functionality. "
-        "Respond with Python 3 source code implementing that description. " 
+        "Respond with Python 3 source code implementing that description.\n\n" 
+        "Write one comment listing any dependencies to be `pip install`ed: `# DEPENDENCIES: ...`.\n\n"
         "Respond only with the source code inside a Markdown code block. "
         "Do not add commentary."
     )
@@ -40,7 +41,8 @@ def get_module_prompts(english: str) -> tuple[str, str]:
     system_prompt = (
         "You are an expert programmer working on contract. "
         "The user, your client, will provide a description of one specific module. "
-        "Respond with Python 3 source code implementing that module. "
+        "Respond with Python 3 source code implementing that module.\n\n"
+        "Write one comment listing any dependencies to be `pip install`ed: `# DEPENDENCIES: ...`.\n\n"
         "Respond only with the source code inside a Markdown code block. "
         "Do not add commentary."
     )
