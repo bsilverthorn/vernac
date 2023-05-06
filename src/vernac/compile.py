@@ -52,13 +52,18 @@ def parse_args():
     )
     parser.add_argument(
         "--inject",
-        metavar="VN PY",
+        metavar="PATH",
         dest="injects_list",
         nargs=2,
         action="append",
         default=[],
+        help="use given source instead of generating (first pass only)"
     )
-    parser.add_argument("--package-dir", metavar="PATH")
+    parser.add_argument(
+        "--package-dir",
+        metavar="PATH",
+        help="write package source here instead of temp dir",
+    )
 
     args = parser.parse_args()
 
