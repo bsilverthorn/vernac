@@ -65,10 +65,14 @@ class MapModulesStage(VernacStage):
         self.title = title
 
     def run(self, context: StageContext, english_all: dict[str, str]) -> StageOutput:
-        english_types = {
-            fn: classify_source_type(context, fn, e)
-            for fn, e in english_all.items()
-        }
+        if len(english_all) == 1:
+            english_types = {fn: SourceType.MAIN for fn in english_all}
+        else:
+            english_types = {
+                fn: classify_source_type(context, fn, e)
+                for fn, e in english_all.items()
+            }
+
         (main,) = [fn for fn, t in english_types.items() if t == SourceType.MAIN]
         modules = [fn for fn, t in english_types.items() if t == SourceType.MODULE]
 
