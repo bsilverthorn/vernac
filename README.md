@@ -149,6 +149,7 @@ Related work
 
 - https://github.com/PrefectHQ/marvin
 - https://github.com/jina-ai/gptdeploy
+- https://github.com/smol-ai/developer/
 
 FAQs
 ----
