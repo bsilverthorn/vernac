@@ -1,6 +1,8 @@
 Vernac: programming (in) language 📖
 ====================================
 
+_**Unmaintained as of June 2023**._
+
 Vernac is a tool for writing software in "vernacular"—plain language.
 
 Vernac isn't for turning English into code; it's for turning English into _programs_:
